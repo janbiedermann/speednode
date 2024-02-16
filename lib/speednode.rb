@@ -1,0 +1,21 @@
+require 'securerandom'
+require 'socket'
+require 'oj'
+require 'execjs/module'
+require 'speednode/config'
+require 'speednode/node_command'
+require 'execjs/runtime'
+if Gem.win_platform?
+  require 'speednode/attach_pipe'
+else
+  require 'speednode/attach_socket'
+end
+require 'speednode/runtime/vm'
+require 'speednode/runtime/vm_command'
+require 'speednode/runtime/context'
+require 'speednode/runtime'
+require 'execjs/runtimes'
+require 'speednode/execjs_runtime'
+require 'speednode/execjs_module'
+require 'speednode/execjs_runtimes'
+require 'execjs'
