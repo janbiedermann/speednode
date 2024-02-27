@@ -151,10 +151,11 @@ module Speednode
           @socket_dir = nil
           @socket_path = SecureRandom.uuid
         else
-          @socket_dir = Dir.mktmpdir("iso-speednode-")
+          @socket_dir = Dir.mktmpdir("speednode-")
           @socket_path = File.join(@socket_dir, "socket")
         end
         @pid = Process.spawn({"SOCKET_PATH" => @socket_path}, @options[:binary], '--expose-gc', @options[:source_maps], @options[:runner_path])
+        Process.detach(@pid)
 
         retries = 500
 
@@ -183,7 +184,9 @@ module Speednode
 
         @started = true
 
-        Kernel.at_exit { self.class.finalize(@socket, @socket_dir, @socket_path, @pid).call }
+        exit_proc = self.class.finalize(@socket, @socket_dir, @socket_path, @pid)
+
+        Kernel.at_exit { exit_proc.call }
       end
 
       def create_responder(context)
