@@ -16,8 +16,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'oj', '>= 3.13.23', '< 3.17.0'
   s.add_dependency 'win32-pipe', '~> 0.4.0'
   s.add_development_dependency 'bundler'
-  s.add_development_dependency 'minitest', '~> 5.20.0'
-  s.add_development_dependency 'rake', '~> 13.1.0'
+  s.add_development_dependency 'minitest', '~> 5.22.0'
+  s.add_development_dependency 'rake', '~> 13.2.0'
   s.add_development_dependency 'uglifier'
   s.required_ruby_version = '>= 3.1.0'
 end
