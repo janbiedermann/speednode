@@ -40,14 +40,17 @@ end
 module Speednode
   class Runtime < ExecJS::Runtime
     class VM
-      def self.finalize(socket, socket_dir, socket_path, pid)
+      def self.finalize(socket, socket_dir, socket_path, pid, spawner_pid)
         proc do
-          ::Speednode::Runtime.responders[socket_path].kill if ::Speednode::Runtime.responders[socket_path]
-          exit_node(socket, socket_dir, socket_path, pid)
+          if spawner_pid == Process.pid
+            ::Speednode::Runtime.responders[socket_path].kill if ::Speednode::Runtime.responders[socket_path]
+            exit_node(socket, socket_dir, socket_path, pid, spawner_pid)
+          end
         end
       end
 
-      def self.exit_node(socket, socket_dir, socket_path, pid)
+      def self.exit_node(socket, socket_dir, socket_path, pid, spawner_pid)
+        return if spawner_pid != Process.pid
         VMCommand.new(socket, "exit", 0).execute rescue nil
         socket.close
         File.unlink(socket_path) if File.exist?(socket_path)
@@ -135,8 +138,9 @@ module Speednode
 
       def stop
         return unless @started
+        return if @spawner_pid != Process.pid
         @mutex.synchronize do
-          self.class.exit_node(@socket, @socket_dir, @socket_path, @pid)
+          self.class.exit_node(@socket, @socket_dir, @socket_path, @pid, @spawner_pid)
           @socket_path = nil
           @started = false
           @socket = nil
@@ -154,6 +158,7 @@ module Speednode
           @socket_dir = Dir.mktmpdir("speednode-")
           @socket_path = File.join(@socket_dir, "socket")
         end
+        @spawner_pid = Process.pid
         @pid = Process.spawn({"SOCKET_PATH" => @socket_path}, @options[:binary], '--expose-gc', @options[:source_maps], @options[:runner_path])
         Process.detach(@pid)
 
@@ -184,8 +189,7 @@ module Speednode
 
         @started = true
 
-        exit_proc = self.class.finalize(@socket, @socket_dir, @socket_path, @pid)
-
+        exit_proc = self.class.finalize(@socket, @socket_dir, @socket_path, @pid, @spawner_pid)
         Kernel.at_exit { exit_proc.call }
       end
 
