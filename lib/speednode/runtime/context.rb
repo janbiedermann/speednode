@@ -16,7 +16,7 @@ module Speednode
         @debug = false unless ENV['NODE_OPTIONS']&.include?('--inspect')
         @vm = @runtime.vm
         @timeout = options[:timeout] ? options[:timeout]/1000 : 600
-        
+
         filename = options.delete(:filename)
         source = File.read(filename) if filename
 

@@ -24,7 +24,7 @@ module Speednode
       @popen_options = {}
       @popen_options[:external_encoding] = @encoding if @encoding
       @popen_options[:internal_encoding] = ::Encoding.default_internal || 'UTF-8'
-      @contexts = {} 
+      @contexts = {}
     end
 
     def register_context(uuid, context)
