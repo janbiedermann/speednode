@@ -1,0 +1,6 @@
+fedora:bash -l -e ci/prescient.sh
+freebsd:bash -l -e ci/prescient.sh
+omnios:bash -l -e ci/prescient.sh
+server:bash -l -e ci/prescient.sh
+ubuntu:bash -l -e ci/prescient.sh
+windows:powershell -Command ci/prescient.bat
