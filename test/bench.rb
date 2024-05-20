@@ -239,7 +239,7 @@ Benchmark.bmbm do |x|
     end
   end
 
-  unless Gem.win_platform?
+  if defined? MiniRacer
     m_context = MiniRacer::Context.new
     m_context.attach('foo', proc { true })
     m_context.eval('foo("bar")')
