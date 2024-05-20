@@ -1,4 +1,6 @@
 #!/bin/bash
 bundle install
 rake
-rake bench
+if [ "Linux" = `uname` ]; then
+  rake bench
+fi
