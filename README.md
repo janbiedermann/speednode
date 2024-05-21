@@ -80,7 +80,7 @@ context.await("foo('test')") # => 'test'
 
 ### Attaching ruby methods to Permissive Contexts
 
-Ruby methods can be attached to Permissive Contexts using Context#attach:
+Ruby methods can be attached to permissive contexts using Context#attach:
 ```ruby
   context = ExecJS.permissive_compile(SOURCE)
   context.attach('foo') { |v| v }
