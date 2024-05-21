@@ -48,7 +48,7 @@ ExecJS.permissive_eval('1+1')
 ```
 
 #### Stopping Contexts
-Contexts can be stopped programmatically. If all contexts of a VM are stopped, the VM itself will be shut down with Node exiting, freeing memory and resources.
+Contexts should be stopped programmatically when no longer needed.
 ```ruby
 context = ExecJS.compile('Test = "test"') # will start a node process
 ExecJS::Runtimes::Speednode.stop_context(context) # will kill the node process
