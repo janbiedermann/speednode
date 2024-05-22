@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.email         = 'jan@kursator.de'
   s.license       = 'MIT'
   s.summary       = 'A fast ExecJS runtime based on nodejs.'
-  s.description   = 'A fast ExecJS runtime based on nodejs. As fast as mini_racer, but without the need to compile the js engine, because it uses the system provided nodejs.'
+  s.description   = 'A fast ExecJS, almost as fast as mini_racer, but without the need to compile the js engine, because it uses the system provided nodejs.'
   s.homepage      = 'https://github.com/janbiedermann/speednode'
   s.files         = `git ls-files -- lib LICENSE README.md`.split("\n")
   s.require_paths = ['lib']
