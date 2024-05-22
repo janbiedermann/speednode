@@ -27,14 +27,17 @@ module Speednode
       @contexts = {}
     end
 
+    def context_registered?(uuid)
+      @contexts.key?(uuid)
+    end
+
     def register_context(uuid, context)
       @contexts[uuid] = context
     end
 
     def unregister_context(uuid)
       context = @contexts.delete(uuid)
-      if context && @vm
-        ObjectSpace.undefine_finalizer(context)
+      if context
         @vm.delete_context(uuid) rescue nil # if delete_context fails, the vm exited before probably
       end
       @vm.stop if @contexts.size == 0 && @vm.started?

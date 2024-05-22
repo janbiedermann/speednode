@@ -1,12 +1,6 @@
 module Speednode
   class Runtime < ExecJS::Runtime
     class Context < ::ExecJS::Runtime::Context
-      def self.finalize(runtime, uuid)
-        proc do
-          runtime.unregister_context(uuid)
-        end
-      end
-
       def initialize(runtime, source = "", options = {})
         @runtime = runtime
         @uuid = SecureRandom.uuid
@@ -25,8 +19,6 @@ module Speednode
         rescue
           source = source.force_encoding('UTF-8')
         end
-
-        ObjectSpace.define_finalizer(self, self.class.finalize(@runtime, @uuid))
 
         if @debug && @permissive
           raw_created(source, options)
@@ -103,6 +95,10 @@ module Speednode
       def permissive_exec(source, _options = nil)
         raise "Context not permissive!" unless @permissive
         raw_exec("(function(){#{source}})()")
+      end
+
+      def available?
+        @runtime.context_registered?(@uuid)
       end
 
       def stop
